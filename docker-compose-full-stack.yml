@@ -1,7 +1,5 @@
 version: '3'
-
 services:
-
   rest-server:
     image: actionml/harness:develop
     ports:
@@ -11,10 +9,14 @@ services:
       REST_SERVER_HOST: "0.0.0.0"
       REST_SERVER_PORT: "9090"
       ELASTICSEARCH_REST_HOST: "elasticsearch"
+      HARNESS_KEYSTORE_PATH: ""
+      HARNESS_SERVER_CERT_PATH: ""
     depends_on:
       - mongo
+      - elasticsearch
     volumes:
-      - ./framework/harness/logs/:/harness/logs
+      - ./framework/harness/conf:/harness/conf
+      - ./framework/harness/logs:/harness/logs
 
   mongo:
     image: mongo:3.2
@@ -23,7 +25,6 @@ services:
     logging:
       driver: none
     volumes: #volumes to persist MongoDB data and make logs accesible
-      - ./framework/mongo/logs:/app/logs
       - ./framework/mongo/data:/data
 
   elasticsearch:
@@ -34,6 +35,18 @@ services:
       - "discovery.type=single-node"
     ports:
       - '9200:9200'
-      - '9300:9300'
     volumes:
       - ./framework/es/data:/usr/share/elasticsearch/data
+
+  auth-server:
+    image: actionml/auth-server:latest
+    environment:
+      AUTH_MONGO_URI: "mongo"
+    ports:
+      - '9099:9099'
+  harness-cli:
+    image: actionml/harness-cli
+    environment:
+      - "PATH=$PATH:/harness-cli/python-cli"
+  vw:
+    image: actionml/vw:heartcore
