@@ -3,37 +3,38 @@ version: '3'
 services:
 
   rest-server:
-    image: actionml/harness:develop
+    image: actionml/harness:${HARNESS_IMAGE_TAG}
     ports:
       - '9090:9090'
     environment:
-      MONGO_HOST: "mongo"
-      REST_SERVER_HOST: "0.0.0.0"
-      REST_SERVER_PORT: "9090"
-      ELASTICSEARCH_REST_HOST: "elasticsearch"
+      MONGO_HOST: mongo
+      REST_SERVER_HOST: 0.0.0.0
+      REST_SERVER_PORT: 9090
+      ELASTICSEARCH_REST_HOST: elasticsearch
     depends_on:
       - mongo
     volumes:
-      - ./framework/harness/logs/:/harness/logs
+      - ${HARNESS_LOGS}:/harness/logs
+      - ${HARNESS_KEYSTORE}:/harness/conf/harness.jks
 
   mongo:
-    image: mongo:3.2
+    image: mongo:${MONGO_IMAGE_TAG}
     ports:
       - '27017:27017'
     logging:
       driver: none
-    volumes: #volumes to persist MongoDB data and make logs accesible
-      - ./framework/mongo/logs:/app/logs
-      - ./framework/mongo/data:/data
+    volumes:
+      - ${MONGO_LOGS}:/app/logs
+      - ${MONGO_DATA}:/data
 
   elasticsearch:
-    image: elasticsearch:5.6.14-alpine
+    image: elasticsearch:${ELASTICSEARCH_IMAGE_TAG}
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
-      - "discovery.type=single-node"
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+      discovery.zen.ping.unicast.hosts: elasticsearch
+      discovery.type: single-node
     ports:
       - '9200:9200'
       - '9300:9300'
     volumes:
-      - ./framework/es/data:/usr/share/elasticsearch/data
+      - ${ES_DATA}:/usr/share/elasticsearch/data
