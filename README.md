@@ -1,11 +1,11 @@
-# Install Using Docker-Compose
+# Simple Harness with Docker-compose
 
 This document describes using Simple Harness **without TLS and Authentication**.
 
 There are 2 types of Harness docker-compose installations:
 
- - **Simple Harness**: Harness + The Universal Recommender **without TLS or Authentication**. Actually all engines are installed but the CBEngine will not operate correctly since Vowpal Wabbit is not included.
- - **Full-stack Harness** Harness + all engine types + VW + TLS + Authentication. This installation is simple but configuration is considerably more complicated due to TLS + Authentication. This is due to creating certificates, keystores, and different user types. This type of installation is described in [The Guide to Full Stack Harness](full_stack_docker_compose.md)
+ - **Simple Harness**: Harness + The Universal Recommender **without TLS or Authentication**. Actually all engines are installed but the CBEngine will not operate correctly since Vowpal Wabbit is not included. This type of installation is described in [README.md](https://github.com/actionml/harness-docker-compose/blob/master/README.md) for this repo.
+ - **Full-stack Harness**: Harness + all engine types + VW + TLS + Authentication. This installation is simple but configuration is considerably more complicated due to TLS + Authentication. This is due to creating certificates, keystores, and different user types. This type of installation is described in [Full Stack Harness with Docker-compose](https://github.com/actionml/harness-full-docker-compose/blob/master/README.md)
 
 We strongly suggest that you try the "simple" installation first!
 
@@ -64,11 +64,18 @@ To get more granular several tools allow monitoring individual containers.
 
 The way Docker supports persistence uses a mapping of container internal file system to the host's file system. Using git to pull the repo will prepare directories on the host for persistence. Look in `harness-docker-compose/framework/...` for the data, conf, and logs of the containers. They are written or read in realtime.
 
-# Using the Harness CLI
+## Harness CLI
 
-Harness must be told which Engines to use and how to configure them. To do this we use the Harness CLI. It communicates with a Harness Server via its REST API. Install following instructions in the README.md for the [repo here](https://github.com/actionml/harness-cli)
+The Harness-CLI is also started in a container. To use it, log-in.
 
-The default config points to Harness on `localhost:9090` which should be fine for the simple docker-compose method of deployment. 
+ - `docker-compose exec harness-cli bash`
 
+    This starts a `bash` shell in the container, configured to communicate with the Harness container
+    
+ - `docker-compose exec harness-cli bash -c 'harness status'`
+
+    this will return the status of Harness
+
+The [harness-cli](https://github.com/actionml/harness-cli) can also be installed on the host OS as desired. It uses the REST API to control Harness and so can be on any host that can connect to Harness even if it runs in a container.
 
 Some further notes may be useful in [Alfonso-notes.md](Alfonso-notes.md)
