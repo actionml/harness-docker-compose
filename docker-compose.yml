@@ -3,7 +3,7 @@ version: '3'
 services:
 
   rest-server:
-    image: actionml/harness:${HARNESS_IMAGE_TAG}
+    image: actionml/harness:develop
     ports:
       - '9090:9090'
     environment:
@@ -15,10 +15,9 @@ services:
       - mongo
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
-      - ${HARNESS_KEYSTORE}:/harness/conf/harness.jks
 
   mongo:
-    image: mongo:${MONGO_IMAGE_TAG}
+    image: mongo:3.2
     ports:
       - '27017:27017'
     logging:
@@ -28,7 +27,7 @@ services:
       - ${MONGO_DATA}:/data
 
   elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_IMAGE_TAG}
+    image: elasticsearch:5.6.14-alpine
     environment:
       ES_JAVA_OPTS: ${ES_JAVA_OPTS}
       discovery.zen.ping.unicast.hosts: elasticsearch
