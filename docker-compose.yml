@@ -2,7 +2,8 @@ version: '3'
 
 services:
 
-  rest-server:
+  harness:
+    restart: always
     image: actionml/harness:develop
     ports:
       - '9090:9090'
@@ -11,12 +12,15 @@ services:
       REST_SERVER_HOST: 0.0.0.0
       REST_SERVER_PORT: 9090
       ELASTICSEARCH_REST_HOST: elasticsearch
+      HARNESS_CLI_AUTH_ENABLED: "false"
     depends_on:
       - mongo
+      - elasticsearch
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
 
   mongo:
+    restart: always
     image: mongo:3.2
     ports:
       - '27017:27017'
@@ -27,6 +31,7 @@ services:
       - ${MONGO_DATA}:/data
 
   elasticsearch:
+    restart: always
     image: elasticsearch:5.6.14-alpine
     environment:
       ES_JAVA_OPTS: ${ES_JAVA_OPTS}
@@ -37,3 +42,11 @@ services:
       - '9300:9300'
     volumes:
       - ${ES_DATA}:/usr/share/elasticsearch/data
+
+  harness-cli:
+    restart: always
+    image: actionml/harness-cli:latest
+    environment:
+        - "PATH=$PATH:/harness-cli/python-cli"
+        - "HARNESS_SERVER_ADDRESS=harness"
+        - "HARNESS_CLI_AUTH_ENABLED=false"
