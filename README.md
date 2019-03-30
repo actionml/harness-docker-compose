@@ -7,11 +7,7 @@ There are 2 types of Harness docker-compose installations:
  - **Simple Harness**: Harness + The Universal Recommender **without TLS or Authentication**. Actually all engines are installed but the CBEngine will not operate correctly since Vowpal Wabbit is not included. This type of installation is described in [README.md](https://github.com/actionml/harness-docker-compose/blob/master/README.md) for this repo.
  - **Full-stack Harness**: Harness + all engine types + VW + TLS + Authentication. This installation is simple but configuration is considerably more complicated due to TLS + Authentication. This is due to creating certificates, keystores, and different user types. This type of installation is described in [Full Stack Harness with Docker-compose](https://github.com/actionml/harness-full-docker-compose/blob/master/README.md)
 
-We strongly suggest that you try the "simple" installation first!
-
-Harness and all services it depends on run in Docker Containers. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
-
-Docker maps certain directories inside containers into the host filesystem so you can configure and manage persistence for the databases, and see logs.
+With docker-compose Harness and all services it depends on run in Docker Containers. even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
 
 # Simple Docker-Compose: UR only, no TLS, no Auth, no VW
 
@@ -21,20 +17,21 @@ Make sure you have a running Docker Engine daemon with CLI installed. These inst
 
 ## Configure
 
-The compose will map container directories into the host filesystem for all of the composed containers. These are prepared by cloning the `harness-docker-compose` repo [here](https://github.com/actionml/harness-docker-compose). For a simple localhost installation no further config is required.
+The compose will map container directories into the host filesystem for all of the composed containers. These are configured by copying `.env.sample` to `.env` and editing `.env` to set the root direc
 
 ## Deployment
 
-For any docker-compose you will launch a first time while building the containers, then you can rebuild or relaunch or login to containers as desired. The network of containers is set to reboot when the host reboots and to re-launch if a container crashes.
-
  - `cd harness-docker-compose`
+ - configure the `.env` file **Not ready yet!**
  - `docker-compose up -d --build` for first time setup
  - `docker-compose up -d` if you want to re-launch the containers after `build` has been done at least once.
- - `git pull && docker-compose down && docker-compose up -d --build --force-recreate` to update harness and takedown old containers and create new containers with new harness version
 
-To control a container network it is best to read the [Docker](https://docs.docker.com/) and [Docker-compose](https://docs.docker.com/compose/overview/) documents. They contain many helpful and powerful techniques. 
-
-**NOTE**: Add `-f docker-compose-cb.yml` to launch the full-stack version of Harness, this uses a slightly different config file.
+Once deployed one or more container in the collection can be updated. It is best to explore the docker-compose cli and options as well as docker commands. Some useful commands for updates are:
+ 
+ - `docker-compose down` stops all container in the local yaml file. Do this before any other docker-compose updates.
+ - `git origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`
+ - `docker-compose pull` this will get all updated containers that are available. This is usually safe since these conatianers are tested together and so are in sync.
+ - `docker-compose up -d --build --force-recreate` to bring up all updated containers by recreating all images.
 
 ## Operations
 
