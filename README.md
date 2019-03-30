@@ -13,20 +13,22 @@ With docker-compose Harness and all services it depends on run in Docker Contain
 
 ![](https://docs.google.com/drawings/d/e/2PACX-1vRja3fTemDMe_0AA8DMMX5fkU-TrI9uTKXJYQJY2-WMyspTjdRVdGGwtcD_wpgvCmh4snFblZC7dhdr/pub?w=1193&h=758)
 
-Make sure you have a running Docker Engine daemon with CLI installed. These instructions assume you are using Ubuntu. **Note**: Docker for macOS and Windows runs in a VM and so has subtle differences that may cause some problems. Please report these in the repo issues list.
+Make sure you have a running Docker Engine daemon with CLI installed. See instructions [here](https://docs.docker.com/install/).
 
 ## Configure
 
-The compose will map container directories into the host filesystem for all of the composed containers. These are configured by copying `.env.sample` to `.env` and editing `.env` to set the root direc
+We need to map container directories into the host filesystem for all of the composed containers. These are configured by copying `.env.sample` to `.env`. This will set all persistence to the included `./docker-persistence` directory in the host file system. To change this edit `.env` and point stored files elsewhere.
 
 ## Deployment
+
+To re-deploy over a previous version see **Updating**.
 
  - `cd harness-docker-compose`
  - configure the `.env` file **Not ready yet!**
  - `docker-compose up -d --build` for first time setup
  - `docker-compose up -d` if you want to re-launch the containers after `build` has been done at least once.
 
-Once deployed one or more container in the collection can be updated. It is best to explore the docker-compose cli and options as well as docker commands. Some useful commands for updates are:
+**Updating**: Once deployed one or more container in the collection can be updated. It is best to explore the docker-compose cli and options as well as docker commands. Some useful commands for updates are:
  
  - `docker-compose down` stops all container in the local yaml file. Do this before any other docker-compose updates.
  - `git origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`
@@ -59,7 +61,7 @@ To get more granular several tools allow monitoring individual containers.
 
 ## Persistence
 
-The way Docker supports persistence uses a mapping of container internal file system to the host's file system. Using git to pull the repo will prepare directories on the host for persistence. Look in `harness-docker-compose/framework/...` for the data, conf, and logs of the containers. They are written or read in realtime.
+The way Docker supports persistence uses a mapping of container internal file system to the host's file system. Using git to pull the repo will prepare directories on the host for persistence. Look in `harness-docker-compose/docker-persistence/...` for the data and logs of the containers.
 
 ## Harness CLI
 
@@ -74,5 +76,3 @@ The Harness-CLI is also started in a container. To use it, log-in.
     this will return the status of Harness
 
 The [harness-cli](https://github.com/actionml/harness-cli) can also be installed on the host OS as desired. It uses the REST API to control Harness and so can be on any host that can connect to Harness even if it runs in a container.
-
-Some further notes may be useful in [Alfonso-notes.md](Alfonso-notes.md)
