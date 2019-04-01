@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  rest-server:
+  harness:
     image: actionml/harness:develop
     ports:
       - '9090:9090'
@@ -20,11 +20,8 @@ services:
     image: mongo:3.2
     ports:
       - '27017:27017'
-    logging:
-      driver: none
-    volumes: #volumes to persist MongoDB data and make logs accesible
-      - ./framework/mongo/logs:/app/logs
-      - ./framework/mongo/data:/data
+    volumes:
+      - ./framework/mongo/data/db:/data/db
 
   elasticsearch:
     image: elasticsearch:5.6.14-alpine
@@ -37,3 +34,9 @@ services:
       - '9300:9300'
     volumes:
       - ./framework/es/data:/usr/share/elasticsearch/data
+
+  harness-cli:
+    image: actionml/harness-cli:latest
+    environment:
+      - "PATH=$PATH:/harness-cli/python-cli"
+      - "HARNESS_SERVER_ADDRESS=harness"
