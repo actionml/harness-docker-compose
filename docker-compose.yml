@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  harness:
+  rest-server:
     image: actionml/harness:develop
     ports:
       - '9090:9090'
@@ -13,6 +13,7 @@ services:
       ELASTICSEARCH_REST_HOST: "elasticsearch"
     depends_on:
       - mongo
+      - elasticsearch
     volumes:
       - ./framework/harness/logs/:/harness/logs
 
@@ -39,4 +40,4 @@ services:
     image: actionml/harness-cli:latest
     environment:
       - "PATH=$PATH:/harness-cli/python-cli"
-      - "HARNESS_SERVER_ADDRESS=harness"
+      - "HARNESS_SERVER_ADDRESS=rest-server"
