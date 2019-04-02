@@ -21,18 +21,19 @@ Make sure you have a running Docker Engine daemon with CLI installed. These inst
 
 ## Configure
 
-The compose will map container directories into the host filesystem for all of the composed containers. These are prepared by cloning the `harness-docker-compose` repo [here](https://github.com/actionml/harness-docker-compose). For a simple localhost installation no further config is required.
+The compose will map container directories into the host filesystem for all of the composed containers. These are prepared by cloning the `harness-docker-compose` repo [here](https://github.com/actionml/harness-docker-compose).
 
 ## Deployment
 
 For any docker-compose you will launch a first time while building the containers, then you can rebuild or relaunch or login to containers as desired. The network of containers is set to reboot when the host reboots and to re-launch if a container crashes.
 
  - `cd harness-docker-compose`
+ - `cp .env.sample .env` and update `.env` file with required paths. Or set required variables in shell, e.g. `export HARNESS_LOGS=/my/path/logs`
  - `docker-compose up -d --build` for first time setup
  - `docker-compose up -d` if you want to re-launch the containers after `build` has been done at least once.
  - `git pull && docker-compose down && docker-compose up -d --build --force-recreate` to update harness and takedown old containers and create new containers with new harness version
 
-To control a container network it is best to read the [Docker](https://docs.docker.com/) and [Docker-compose](https://docs.docker.com/compose/overview/) documents. They contain many helpful and powerful techniques. 
+To control a container network it is best to read the [Docker](https://docs.docker.com/) and [Docker-compose](https://docs.docker.com/compose/overview/) documents. They contain many helpful and powerful techniques.
 
 **NOTE**: Add `-f docker-compose-cb.yml` to launch the full-stack version of Harness, this uses a slightly different config file.
 
@@ -45,17 +46,17 @@ Once installed the containers work like a cluster of machines all running on a s
 For instance logs can be view by using:
 
     docker-compose logs <some-container-id>
-    
+
 This will show a screen full of logs, use
 
     docker-compose logs -f <some-container-id>
-    
+
 in place of `tail`ing to stream incoming logs to the console continuously.
 
-If you want to examine historical logs look into the persistent files stored in `harness-docker-compose/framework/...` for the log files of the different services running in containers. 
+If you want to examine historical logs look into the persistent files stored in `harness-docker-compose/framework/...` for the log files of the different services running in containers.
 
 ### Monitoring
-   
+
 Simple monitoring can be done for that host looking at memory, disk and CPU usage since all containers are running on the host.
 
 To get more granular several tools allow monitoring individual containers.
@@ -71,7 +72,7 @@ The Harness-CLI is also started in a container. To use it, log-in.
  - `docker-compose exec harness-cli bash`
 
     This starts a `bash` shell in the container, configured to communicate with the Harness container
-    
+
  - `docker-compose exec harness-cli bash -c 'harness status'`
 
     this will return the status of Harness

@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  rest-server:
+  harness:
     image: actionml/harness:develop
     ports:
       - '9090:9090'
@@ -15,29 +15,29 @@ services:
       - mongo
       - elasticsearch
     volumes:
-      - ./framework/harness/logs/:/harness/logs
+      - ${HARNESS_LOG_PATH}:/harness/logs
 
   mongo:
     image: mongo:3.2
     ports:
       - '27017:27017'
     volumes:
-      - ./framework/mongo/data/db:/data/db
+      - ${MONGO_DATA}:/data/db
 
   elasticsearch:
     image: elasticsearch:5.6.14-alpine
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
-      - "discovery.type=single-node"
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+      discovery.zen.ping.unicast.hosts: "elasticsearch"
+      discovery.type: "single-node"
     ports:
       - '9200:9200'
       - '9300:9300'
     volumes:
-      - ./framework/es/data:/usr/share/elasticsearch/data
+      - ${ES_DATA}:/usr/share/elasticsearch/data
 
   harness-cli:
     image: actionml/harness-cli:latest
     environment:
-      - "PATH=$PATH:/harness-cli/python-cli"
-      - "HARNESS_SERVER_ADDRESS=rest-server"
+      PATH: "$PATH:/harness-cli/python-cli"
+      HARNESS_SERVER_ADDRESS: "harness"
