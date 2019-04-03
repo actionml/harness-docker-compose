@@ -47,6 +47,8 @@ services:
     restart: always
     image: actionml/harness-cli:latest
     environment:
-        - "PATH=$PATH:/harness-cli/python-cli"
+        - "PATH=$PATH:/harness-cli/harness-cli"
         - "HARNESS_SERVER_ADDRESS=harness"
         - "HARNESS_CLI_AUTH_ENABLED=false"
+    volumes:
+      - ${ES_DATA}:/usr/share/elasticsearch/data
