@@ -49,4 +49,6 @@ services:
         - "HARNESS_SERVER_ADDRESS=harness"
         - "HARNESS_CLI_AUTH_ENABLED=false"
     volumes:
-      - ${ES_DATA}:/usr/share/elasticsearch/data
+      # not needed by harness-cli container
+      # - ${ES_DATA}:/usr/share/elasticsearch/data
+      - ${CLI_DATA}:/harness-cli-data
