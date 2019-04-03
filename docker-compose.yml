@@ -18,6 +18,7 @@ services:
       - elasticsearch
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
+      - ${CLI_DATA}:/harness-cli-data
 
   mongo:
     restart: always
