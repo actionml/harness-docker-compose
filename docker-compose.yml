@@ -6,28 +6,29 @@ services:
     restart: always
     image: actionml/harness:develop
     ports:
-      - '9090:9090'
+      - "9090:9090"
     environment:
-      MONGO_HOST: "mongo"
-      REST_SERVER_HOST: "0.0.0.0"
-      REST_SERVER_PORT: "9090"
-      ELASTICSEARCH_REST_HOST: "elasticsearch"
+      MONGO_HOST: mongo
+      REST_SERVER_HOST: 0.0.0.0
+      REST_SERVER_PORT: 9090
+      ELASTICSEARCH_REST_HOST: elasticsearch
       HARNESS_CLI_AUTH_ENABLED: "false"
     depends_on:
       - mongo
       - elasticsearch
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
+      - ${CLI_DATA}:/harness-cli-data
 
   mongo:
     restart: always
     image: mongo:3.2
+    command: --logappend --logpath=/logs/mongod.log
     ports:
-      - '27017:27017'
-    logging:
-      driver: none
-    volumes: #volumes to persist MongoDB data and make logs accesible
-      - ${MONGO_DATA}:/data
+      - "27017:27017"
+    volumes:
+      - ${MONGO_LOGS}:/logs
+      - ${MONGO_DATA}:/data/db
 
   elasticsearch:
     restart: always
@@ -45,6 +46,8 @@ services:
     restart: always
     image: actionml/harness-cli:latest
     environment:
-        - "PATH=$PATH:/harness-cli/python-cli"
-        - "HARNESS_SERVER_ADDRESS=harness"
-        - "HARNESS_CLI_AUTH_ENABLED=false"
+        PATH: "$PATH:/harness-cli/harness-cli"
+        HARNESS_SERVER_ADDRESS: harness
+        HARNESS_CLI_AUTH_ENABLED: "false"
+    volumes:
+    - ${CLI_DATA}:/harness-cli-data
