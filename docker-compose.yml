@@ -6,7 +6,7 @@ services:
     restart: always
     image: actionml/harness:develop
     ports:
-      - '9090:9090'
+      - "9090:9090"
     environment:
       MONGO_HOST: mongo
       REST_SERVER_HOST: 0.0.0.0
@@ -22,13 +22,12 @@ services:
   mongo:
     restart: always
     image: mongo:3.2
+    command: --logappend --logpath=/logs/mongod.log
     ports:
-      - '27017:27017'
-    logging:
-      driver: none
+      - "27017:27017"
     volumes:
-      - ${MONGO_LOGS}:/app/logs
-      - ${MONGO_DATA}:/data
+      - ${MONGO_LOGS}:/logs
+      - ${MONGO_DATA}:/data/db
 
   elasticsearch:
     restart: always
@@ -38,8 +37,8 @@ services:
       discovery.zen.ping.unicast.hosts: elasticsearch
       discovery.type: single-node
     ports:
-      - '9200:9200'
-      - '9300:9300'
+      - "9200:9200"
+      - "9300:9300"
     volumes:
       - ${ES_DATA}:/usr/share/elasticsearch/data
 
@@ -47,8 +46,6 @@ services:
     restart: always
     image: actionml/harness-cli:latest
     environment:
-        - "PATH=$PATH:/harness-cli/harness-cli"
-        - "HARNESS_SERVER_ADDRESS=harness"
-        - "HARNESS_CLI_AUTH_ENABLED=false"
-    volumes:
-      - ${ES_DATA}:/usr/share/elasticsearch/data
+        PATH: "$PATH:/harness-cli/harness-cli"
+        HARNESS_SERVER_ADDRESS: harness
+        HARNESS_CLI_AUTH_ENABLED: "false"
