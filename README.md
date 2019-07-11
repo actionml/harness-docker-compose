@@ -10,6 +10,10 @@ With docker-compose Harness and all services it depends on run in Docker Contain
 
 Make sure you have a running Docker Engine daemon with CLI installed. See instructions [here](https://docs.docker.com/install/).
 
+# Prerequisites
+
+Install the Docker components for managing containers.
+
 ## Configure
 
 Map container directories into the host filesystem for all of the composed containers.
