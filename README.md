@@ -19,7 +19,7 @@ Install the Docker components for managing containers.
 Map container directories into the host filesystem for all of the composed containers.
 
  - `cd harness-docker-compose`
- - `cp .sample.env .env`
+ - `cp .env.sample .env`
  - edit the `.env` file if the defaults are not adequate. 
 
 One important thing to note is that in order to import files using `harness-cli import <engine-id> some/path/to/json` the path to the json must be resolved in the harness container AND the harness-cli container will need a place to persist engine json files. This is solved by mapping a host directory into both containers (for convenience) like this:
