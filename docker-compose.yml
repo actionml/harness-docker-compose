@@ -43,7 +43,8 @@ services:
 
   harness-cli:
     restart: always
-    image: actionml/harness-cli:latest
+    #image: actionml/harness-cli:latest
+    image: actionml/harness-cli:develop
     environment:
         PATH: "$PATH:/harness-cli/harness-cli"
         HARNESS_SERVER_ADDRESS: harness
