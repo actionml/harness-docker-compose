@@ -8,16 +8,20 @@ services:
     ports:
       - "9090:9090"
     environment:
-      MONGO_HOST: mongo
-      REST_SERVER_HOST: 0.0.0.0
-      REST_SERVER_PORT: 9090
-      ELASTICSEARCH_REST_HOST: elasticsearch
+      #MONGO_HOST: mongo
+      #REST_SERVER_HOST: 0.0.0.0
+      #REST_SERVER_PORT: 9090
+      #ELASTICSEARCH_REST_HOST: elasticsearch
+      MONGO_URI: mongodb://mongo:27017
+      HARNESS_URI: http://0.0.0.0:9090
+      ELASTICSEARCH_URI: http://elasticsearch:9200
     depends_on:
       - mongo
       - elasticsearch
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
-      - ${CLI_DATA}:/harness-cli-data
+      #- ${CLI_DATA}:/harness-cli-data
+      - ${CLI_DATA}:/data
 
   mongo:
     restart: always
@@ -49,4 +53,5 @@ services:
         PATH: "$PATH:/harness-cli/harness-cli"
         HARNESS_SERVER_ADDRESS: harness
     volumes:
-    - ${CLI_DATA}:/harness-cli-data
+    #- ${CLI_DATA}:/harness-cli-data
+    - ${CLI_DATA}:/data
