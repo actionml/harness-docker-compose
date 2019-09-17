@@ -24,7 +24,7 @@ Map container directories into the host filesystem for all of the composed conta
 
 One important thing to note is that in order to import files using `harness-cli import <engine-id> some/path/to/json` the path to the json must be resolved in the harness container AND the harness-cli container will need a place to persist engine json files. This is solved by mapping a host directory into both containers (for convenience) like this:
 
-![](https://docs.google.com/drawings/d/e/2PACX-1vQtS4tOsE8XB6S_qnxGjaTUiAihmh2XV34lwAEjsjFlP-Rag-JU2EBxLkSBjbFYZVILhcRdKrirWK0v/pub?w=1131&h=444)
+![](https://docs.google.com/drawings/d/e/2PACX-1vQFb4EfmP6Ocy1UxjqBd8bVPFVumIIY_vrgDO8i5zvmrvwporCpG2O3L9ZKhsiZl3N0zO_SWKuFZ4Nt/pub?w=1123&h=271)
 
 ## Deployment
 
