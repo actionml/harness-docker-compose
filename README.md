@@ -2,7 +2,7 @@
 
 This document describes using Harness **without TLS and Authentication**.
 
-With docker-compose Harness and all services it depends on run in Docker Containers. even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
+With docker-compose Harness and all services it depends on run in Docker Containers, even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
 
 # Harness + UR
 
@@ -19,12 +19,12 @@ Install the Docker components for managing containers.
 Map container directories into the host filesystem for all of the composed containers.
 
  - `cd harness-docker-compose`
- - `cp .sample.env .env`
+ - `cp .env.sample .env`
  - edit the `.env` file if the defaults are not adequate. 
 
 One important thing to note is that in order to import files using `harness-cli import <engine-id> some/path/to/json` the path to the json must be resolved in the harness container AND the harness-cli container will need a place to persist engine json files. This is solved by mapping a host directory into both containers (for convenience) like this:
 
-![](https://docs.google.com/drawings/d/e/2PACX-1vQtS4tOsE8XB6S_qnxGjaTUiAihmh2XV34lwAEjsjFlP-Rag-JU2EBxLkSBjbFYZVILhcRdKrirWK0v/pub?w=1131&h=444)
+![](https://docs.google.com/drawings/d/e/2PACX-1vQFb4EfmP6Ocy1UxjqBd8bVPFVumIIY_vrgDO8i5zvmrvwporCpG2O3L9ZKhsiZl3N0zO_SWKuFZ4Nt/pub?w=1123&h=271)
 
 ## Deployment
 
@@ -38,6 +38,7 @@ Once deployed one or more containers in the collection can be updated. It is bes
  - `git pull origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`. The `git` repo contains the latest project structure and `coker-compose.yml`.
  - `docker-compose pull` this will get all updated containers that are available.
  - `docker-compose up -d --build --force-recreate` to bring up all updated containers by recreating all images.
+ - `docker-compose pull` is a very important command that will get the latest image version from the ActionML automated CI/CD pipeline. **Note**: this project uses a possibly unstable SNAPSHOT version of Harness. To change this, edit docker-compose.yml and change the versions to `harness:latest` and `harness-cli:latest`, which will get stable released versions.
 
 ## Operations
 
