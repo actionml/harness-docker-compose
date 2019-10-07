@@ -1,7 +1,5 @@
 version: '3'
-
 services:
-
   harness:
     restart: always
     image: actionml/harness:develop
@@ -15,6 +13,7 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+      - redis
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
       - ${CLI_DATA}:/harness-cli-data
@@ -40,6 +39,14 @@ services:
       - '9200:9200'
     volumes:
       - ${ES_DATA}:/usr/share/elasticsearch/data
+
+  redis:
+    restart: always
+    image: redis:alpine
+    deploy:
+      replicas: 1
+    ports: 
+      - "6379"
 
   harness-cli:
     restart: always
