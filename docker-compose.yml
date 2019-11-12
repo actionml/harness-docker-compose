@@ -49,8 +49,8 @@ services:
         PATH: "$PATH:/harness-cli/harness-cli"
         HARNESS_SERVER_ADDRESS: harness
     volumes:
-      - ${CLI_DATA}:/data
-  
+    - ${CLI_DATA}:/harness-cli-data
+
   watchtower:
     restart: always
     image: v2tec/watchtower
