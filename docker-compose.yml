@@ -1,5 +1,6 @@
 version: '3'
 services:
+  
   harness:
     restart: always
     image: actionml/harness:develop
@@ -19,7 +20,7 @@ services:
       
   mongo:
     restart: always
-    image: mongo:3.2
+    image: mongo:4.2
     container_name: mongo
     command: --logappend --logpath=/tmp/mongod.log
     ports:
