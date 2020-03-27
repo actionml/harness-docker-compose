@@ -1,4 +1,5 @@
 # Harness with Docker-compose
+**Version 1.0**
 
 With docker-compose Harness and all services it depends on run in Docker Containers, even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
 
