@@ -1,18 +1,18 @@
 # Harness with Docker-compose
 
-This document describes using Harness **without TLS and Authentication**.
-
 With docker-compose Harness and all services it depends on run in Docker Containers, even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
 
 # Harness + UR
 
 ![](https://docs.google.com/drawings/d/e/2PACX-1vRja3fTemDMe_0AA8DMMX5fkU-TrI9uTKXJYQJY2-WMyspTjdRVdGGwtcD_wpgvCmh4snFblZC7dhdr/pub?w=1193&h=758)
 
-Make sure you have a running Docker Engine daemon with CLI installed. See instructions [here](https://docs.docker.com/install/).
 
 # Prerequisites
 
-Install the Docker components for managing containers.
+ 1. Install the Docker components for managing containers. This should be done as a regular user on the host -- a non-root user with passwordless sudoer permissions. See instructions [like these](https://docs.docker.com/install/) or as appropriate for your "host" OS. You'll need from Docker:
+     - Docker itself, including whtever is needed to host running containers.
+     - Docker-compose, some extensions that allow a network of containers to be run on a single host. 
+ 2. Although this project MAY work on Windows it has not been tested and the examples commands below assume a 'nix style command shell like bash.
 
 ## Configure
 
@@ -35,14 +35,29 @@ With the docker daemon running:
 Once deployed one or more containers in the collection can be updated. It is best to explore the docker-compose cli and options as well as docker commands. Some useful commands for updates are:
  
  - `docker-compose down` stops all container in the local yaml file. Do this before any other docker-compose updates.
- - `git pull origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`. The `git` repo contains the latest project structure and `coker-compose.yml`.
- - `docker-compose pull` this will get all updated containers that are available.
+ - `git pull origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`. The `git` repo contains the latest project structure and `docker-compose.yml`.
  - `docker-compose up -d --build --force-recreate` to bring up all updated containers by recreating all images.
- - `docker-compose pull` is a very important command that will get the latest image version from the ActionML automated CI/CD pipeline. **Note**: this project uses a possibly unstable SNAPSHOT version of Harness. To change this, edit docker-compose.yml and change the versions to `harness:latest` and `harness-cli:latest`, which will get stable released versions.
+ - `docker-compose pull` is a very important command that will get the latest image version from the ActionML automated CI/CD pipeline. **Note**: this project uses a possibly unstable develop/SNAPSHOT version of Harness. To change this, edit docker-compose.yml and change the versions to `harness:latest` and `harness-cli:latest`, which will get stable released versions.
 
 ## Operations
 
 Once installed the containers work somewhat like a cluster of virtual machines all running on a single host. You can login to them, examine logs, and start and stop them.
+
+### Upgrades Experimental
+
+**Note:** This project uses [watchtower](https://containrrr.github.io/watchtower/) to monitor the image tagged actionml/harness:develop When it is updated the new image will be automatically pulled and deployed. This may not fit your use case and since the "develop" image is targeted this will pull **unreleased** code! To change this, fork the project and edit docker-compose.yml to target any supported image tag, like actionml/harness/latest to get the latest release. 
+
+This is not a thorough upgrade mechanism since some migration of data may be required during an upgrade so beware anything but experimental use of this feature based on watchtower.
+
+### Upgrades Stable
+
+To use this docker-comnpose project reliably is is best to target a named version of Harness tagged with 0.5.1 (due for release Feb 28 2020) or later and only upgrade manually by updating the image tag you have in docker-compose.yml and following Docker instructions for things like:
+
+ - `docker-compose pull`
+ - `docker-compose down`
+ - `docker-compose up -d --build --force-recreate`
+
+ Be aware the this may be dangerous if Harness schemas have changed, consult release notes for your version and the version you wish to use
 
 ### Logs
 
