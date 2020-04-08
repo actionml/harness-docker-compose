@@ -10,6 +10,8 @@ services:
       MONGO_URI: mongodb://mongo:27017
       HARNESS_URI: http://0.0.0.0:9090
       ELASTICSEARCH_URI: http://elasticsearch:9200
+      HARNESS_MAX_REQUESTS: 16
+      HARNESS_MAX_CONNECTIONS: 1024
     depends_on:
       - mongo
       - elasticsearch
@@ -19,7 +21,7 @@ services:
       
   mongo:
     restart: always
-    image: mongo:3.2
+    image: mongo:4.2
     container_name: mongo
     command: --logappend --logpath=/tmp/mongod.log
     ports:
