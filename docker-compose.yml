@@ -17,6 +17,23 @@ services:
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
       - ${HARNESS_DATA}:/data
+
+  harness:
+    restart: always
+    image: actionml/harness:develop
+    container_name: harness_2
+    ports:
+      - "9091:9090"
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+      HARNESS_URI: http://0.0.0.0:9090
+      ELASTICSEARCH_URI: http://elasticsearch:9200
+    depends_on:
+      - mongo
+      - elasticsearch
+    volumes:
+      - ${HARNESS_LOGS}:/harness/logs
+      - ${HARNESS_DATA}:/data
       
   mongo:
     restart: always
