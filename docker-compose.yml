@@ -13,6 +13,9 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+      - etcd0
+      - etcd1
+      - etcd2
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
       - ${HARNESS_DATA}:/data
