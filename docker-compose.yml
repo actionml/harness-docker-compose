@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   harness:
     restart: always
     image: actionml/harness:develop
@@ -17,10 +16,10 @@ services:
     volumes:
       - ${HARNESS_LOGS}:/harness/logs
       - ${HARNESS_DATA}:/data
-      
+
   mongo:
     restart: always
-    image: mongo:3.2
+    image: mongo:latest
     container_name: mongo
     command: --logappend --logpath=/tmp/mongod.log
     ports:
@@ -47,9 +46,9 @@ services:
     image: actionml/harness-cli:develop
     container_name: harness-cli
     environment:
-        HARNESS_SERVER_ADDRESS: harness
+      HARNESS_SERVER_ADDRESS: harness
     volumes:
-    - ${HARNESS_DATA}:/data
+      - ${HARNESS_DATA}:/data
 
   watchtower:
     restart: always
@@ -58,3 +57,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 3000
+
+  sparkmaster:
+    image: actionml/spark:latest
+    command: master
+    ports:
+      - "8080:8080"
+
+  sparkworker:
+    image: actionml/spark:latest
+    command: worker spark://sparkmaster:7077
+    depends_on:
+      - sparkmaster
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_WORKER_MEMORY=1g
