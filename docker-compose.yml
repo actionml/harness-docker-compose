@@ -31,7 +31,7 @@ services:
 
   elasticsearch:
     restart: always
-    image: elasticsearch:7.6.0
+    image: elasticsearch:7.16.1
     container_name: elasticsearch
     environment:
       ES_JAVA_OPTS: ${ES_JAVA_OPTS}
